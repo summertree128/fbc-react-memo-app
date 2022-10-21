@@ -15,6 +15,7 @@ class MemoApp extends React.Component {
     this.handleChange = this.handleChange.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
     this.handleEdit = this.handleEdit.bind(this)
+    this.handleDelete = this.handleDelete.bind(this)
   }
 
   render () {
@@ -34,6 +35,7 @@ class MemoApp extends React.Component {
               id={this.state.id}
               onChange={this.handleChange}
               onSubmit={this.handleSubmit}
+              onDelete={this.handleDelete}
             />}
           </div>
         </div>
@@ -68,6 +70,15 @@ class MemoApp extends React.Component {
     const id = e.target.dataset.id
     const memoToEdit = this.state.memos.find(memo => memo.id === parseInt(id))
     this.setState({ editing: true, id: id, text: memoToEdit.content })
+  }
+
+  handleDelete(e) {
+    e.preventDefault()
+    const stateToSet = { editing: false, id: "", text: "" }
+    if (this.state.id) {
+      stateToSet.memos = this.state.memos.filter(memo => memo.id !== parseInt(this.state.id))
+    }
+    this.setState(stateToSet)
   }
 
   updateMemo(id, text) {

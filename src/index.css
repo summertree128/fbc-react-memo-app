@@ -39,3 +39,11 @@ ul {
   display: flex;
   flex-direction: column;
 }
+
+.memo-app-button-area {
+  display: flex;
+}
+
+.memo-app-save-button {
+  width: 100%;
+}
