@@ -11,11 +11,17 @@ class MemoApp extends React.Component {
       text: "",
       id: "",
     }
+    this.itemKey = 'memos'
     this.handleAdd = this.handleAdd.bind(this)
     this.handleChange = this.handleChange.bind(this)
     this.handleSave = this.handleSave.bind(this)
     this.handleEdit = this.handleEdit.bind(this)
     this.handleDelete = this.handleDelete.bind(this)
+  }
+
+  componentDidMount () {
+    const memos = this.getMemos()
+    this.setState({ memos })
   }
 
   render () {
@@ -74,11 +80,9 @@ class MemoApp extends React.Component {
 
   handleDelete(e) {
     e.preventDefault()
-    const stateToSet = { editing: false, id: "", text: "" }
     if (this.state.id) {
-      stateToSet.memos = this.state.memos.filter(memo => memo.id !== parseInt(this.state.id))
+      this.deleteMemo(this.state.id)
     }
-    this.setState(stateToSet)
   }
 
   updateMemo(id, text) {
@@ -88,6 +92,7 @@ class MemoApp extends React.Component {
     updatedMemo.content = text
 
     this.setState({ memos: newMemos, editing: false, id: "", text: ""})
+    this.saveMemos(newMemos)
   }
 
   createMemo(text) {
@@ -97,7 +102,24 @@ class MemoApp extends React.Component {
       content: text,
     }
     const newMemos = [...this.state.memos, newMemo]
+
     this.setState({ memos: newMemos, editing: false, id: "", text: ""})
+    this.saveMemos(newMemos)
+  }
+
+  deleteMemo(id) {
+    const newMemos = this.state.memos.filter(memo => memo.id !== parseInt(id))
+    this.setState({ memos: newMemos, editing: false, id: "", text: "" })
+    this.saveMemos(newMemos)
+  }
+
+  getMemos() {
+    const memos = localStorage.getItem(this.itemKey)
+    return memos === null ? [] : JSON.parse(memos)
+  }
+
+  saveMemos(memos) {
+    localStorage.setItem(this.itemKey, JSON.stringify(memos))
   }
 }
 
