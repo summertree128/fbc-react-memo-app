@@ -6,7 +6,7 @@ class MemoList extends React.Component {
       <ul>
         {this.props.memos.map(memo => (
           <li key={memo.id}>
-            {memo.text}
+            {memo.title}
           </li>
         ))}
       </ul>
