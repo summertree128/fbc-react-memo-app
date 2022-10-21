@@ -1,3 +1,5 @@
+import MemoList from "./components/MemoList";
+
 function MemoApp() {
   return (
     <div className="memo-app">
@@ -6,7 +8,7 @@ function MemoApp() {
       </header>
       <div className="memo-app-container">
         <aside className="memo-app-sidebar">
-          This is side bar
+          <MemoList />
         </aside>
         <div className="memo-app-content">
           This is content
