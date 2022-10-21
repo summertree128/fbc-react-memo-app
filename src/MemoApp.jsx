@@ -27,7 +27,7 @@ class MemoApp extends React.Component {
         <div className="memo-app-container">
           <aside className="memo-app-sidebar">
             <MemoList memos={this.state.memos} onEdit={this.handleEdit} />
-            <button onClick={this.handleAdd}>+</button>
+            <button onClick={this.handleAdd} className="memo-app-add-button">+</button>
           </aside>
           <div className="memo-app-content">
             {this.state.editing && <MemoDetail 

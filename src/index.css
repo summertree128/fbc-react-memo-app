@@ -35,15 +35,29 @@ ul {
   margin-right: 8px;
 }
 
+.memo-app-list-item {
+  margin-bottom: 4px;
+}
+
+.memo-app-add-button {
+  margin-bottom: 8px;
+}
+
 .memo-app-form {
   display: flex;
   flex-direction: column;
 }
 
+.memo-app-form-text-area {
+  height: 80px;
+}
+
 .memo-app-button-area {
   display: flex;
+  margin-top: 8px;
 }
 
 .memo-app-save-button {
   width: 100%;
+  margin-right: 8px;
 }
