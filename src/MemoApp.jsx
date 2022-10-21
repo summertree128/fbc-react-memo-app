@@ -11,9 +11,9 @@ class MemoApp extends React.Component {
       text: "",
       id: "",
     }
-    this.handleClick = this.handleClick.bind(this)
+    this.handleAdd = this.handleAdd.bind(this)
     this.handleChange = this.handleChange.bind(this)
-    this.handleSubmit = this.handleSubmit.bind(this)
+    this.handleSave = this.handleSave.bind(this)
     this.handleEdit = this.handleEdit.bind(this)
     this.handleDelete = this.handleDelete.bind(this)
   }
@@ -27,14 +27,14 @@ class MemoApp extends React.Component {
         <div className="memo-app-container">
           <aside className="memo-app-sidebar">
             <MemoList memos={this.state.memos} onEdit={this.handleEdit} />
-            <button onClick={this.handleClick}>+</button>
+            <button onClick={this.handleAdd}>+</button>
           </aside>
           <div className="memo-app-content">
             {this.state.editing && <MemoDetail 
               text={this.state.text}
               id={this.state.id}
               onChange={this.handleChange}
-              onSubmit={this.handleSubmit}
+              onSave={this.handleSave}
               onDelete={this.handleDelete}
             />}
           </div>
@@ -43,7 +43,7 @@ class MemoApp extends React.Component {
     );
   }
 
-  handleClick (e) {
+  handleAdd (e) {
     e.preventDefault()
     this.setState({ editing: true, id: "", text: "" })
   }
@@ -52,7 +52,7 @@ class MemoApp extends React.Component {
     this.setState({ text: e.target.value })
   }
 
-  handleSubmit(e) {
+  handleSave (e) {
     e.preventDefault()
     if (this.state.text.length === 0) {
       return

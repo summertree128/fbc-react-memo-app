@@ -1,6 +1,6 @@
 function MemoDetail(props) {
   return (
-    <form onSubmit={props.onSubmit} className="memo-app-form">
+    <form onSubmit={props.onSave} className='memo-app-form'>
       <textarea name="text" onChange={props.onChange} value={props.text}></textarea>
       <div className="memo-app-button-area">
         <button className="memo-app-save-button">Save</button>
