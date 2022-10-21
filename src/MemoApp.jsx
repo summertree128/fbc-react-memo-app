@@ -45,7 +45,7 @@ class MemoApp extends React.Component {
 
   handleClick (e) {
     e.preventDefault()
-    this.setState({ editing: true })
+    this.setState({ editing: true, id: "", text: "" })
   }
 
   handleChange(e) {
