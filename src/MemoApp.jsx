@@ -1,134 +1,135 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import MemoList from "./components/MemoList";
 import MemoDetail from "./components/MemoDetail";
 
-class MemoApp extends React.Component {
-  constructor() {
-    super();
-    this.state = {
-      memos: [],
-      editing: false,
-      text: "",
-      id: "",
-    };
-    this.itemKey = "memos";
-    this.handleAdd = this.handleAdd.bind(this);
-    this.handleChange = this.handleChange.bind(this);
-    this.handleSave = this.handleSave.bind(this);
-    this.handleEdit = this.handleEdit.bind(this);
-    this.handleDelete = this.handleDelete.bind(this);
-  }
+function MemoApp() {
+  const [memos, setMemos] = useState([]);
+  const [editing, setEditing] = useState(false);
+  const [editedText, setEditedText] = useState("");
+  const [editedId, setEditedId] = useState("");
+  const itemKey = "memos";
 
-  componentDidMount() {
-    const memos = this.getMemos();
-    this.setState({ memos });
-  }
-
-  render() {
-    return (
-      <div className="memo-app">
-        <header className="memo-app-header">
-          <p>Super Simple Memo App</p>
-        </header>
-        <div className="memo-app-container">
-          <aside className="memo-app-sidebar">
-            <MemoList memos={this.state.memos} onEdit={this.handleEdit} />
-            <button onClick={this.handleAdd} className="memo-app-add-button">
-              +
-            </button>
-          </aside>
-          <div className="memo-app-content">
-            {this.state.editing && (
-              <MemoDetail
-                text={this.state.text}
-                id={this.state.id}
-                onChange={this.handleChange}
-                onSave={this.handleSave}
-                onDelete={this.handleDelete}
-              />
-            )}
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  handleAdd(e) {
+  const handleAdd = (e) => {
     e.preventDefault();
-    this.setState({ editing: true, id: "", text: "" });
+    setEditing(true);
+    setEditedId("");
+    setEditedText("");
   }
 
-  handleChange(e) {
-    this.setState({ text: e.target.value });
+  const handleChange = (e) => {
+    setEditedText(e.target.value);
   }
 
-  handleSave(e) {
+  const handleSave = (e) => {
     e.preventDefault();
-    if (this.state.text.length === 0) {
+    if (editedText.length === 0) {
       return;
     }
 
-    if (this.state.id) {
-      this.updateMemo(this.state.id, this.state.text);
+    if (editedId) {
+      updateMemo(editedId, editedText);
     } else {
-      this.createMemo(this.state.text);
+      createMemo(editedText);
     }
   }
 
-  handleEdit(e) {
+  const handleEdit = (e) => {
     e.preventDefault();
     const id = e.target.dataset.id;
-    const memoToEdit = this.state.memos.find(
+    const memoToEdit = memos.find(
       (memo) => memo.id === parseInt(id)
     );
-    this.setState({ editing: true, id: id, text: memoToEdit.content });
+    setEditing(true);
+    setEditedId(id);
+    setEditedText(memoToEdit.content);
   }
 
-  handleDelete(e) {
+  const handleDelete = (e) => {
     e.preventDefault();
-    if (this.state.id) {
-      this.deleteMemo(this.state.id);
+    if (editedId) {
+      deleteMemo(editedId);
     }
   }
 
-  updateMemo(id, text) {
-    const newMemos = [...this.state.memos];
+  const updateMemo = (id, text) => {
+    const newMemos = [...memos];
     const updatedMemo = newMemos.find((memo) => memo.id === parseInt(id));
     updatedMemo.title = text.split("\n")[0];
     updatedMemo.content = text;
 
-    this.setState({ memos: newMemos, editing: false, id: "", text: "" });
-    this.saveMemos(newMemos);
+    setMemos(newMemos);
+    setEditing(false);
+    setEditedId("");
+    setEditedText("");
+    saveMemos(newMemos);
   }
 
-  createMemo(text) {
+  const createMemo = (text) => {
     const newMemo = {
       id: Date.now(),
       title: text.split("\n")[0],
       content: text,
     };
-    const newMemos = [...this.state.memos, newMemo];
+    const newMemos = [...memos, newMemo];
 
-    this.setState({ memos: newMemos, editing: false, id: "", text: "" });
-    this.saveMemos(newMemos);
+    setMemos(newMemos);
+    setEditing(false);
+    setEditedId("");
+    setEditedText("");
+    saveMemos(newMemos);
   }
 
-  deleteMemo(id) {
-    const newMemos = this.state.memos.filter(
+  const deleteMemo = (id) => {
+    const newMemos = memos.filter(
       (memo) => memo.id !== parseInt(id)
     );
-    this.setState({ memos: newMemos, editing: false, id: "", text: "" });
-    this.saveMemos(newMemos);
+    setMemos(newMemos);
+    setEditing(false);
+    setEditedId("");
+    setEditedText("")
+    saveMemos(newMemos);
   }
 
-  getMemos() {
-    const memos = localStorage.getItem(this.itemKey);
+ const getMemos = () => {
+    const memos = localStorage.getItem(itemKey);
     return memos === null ? [] : JSON.parse(memos);
   }
 
-  saveMemos(memos) {
-    localStorage.setItem(this.itemKey, JSON.stringify(memos));
+  const saveMemos = (memos) => {
+    localStorage.setItem(itemKey, JSON.stringify(memos));
   }
+
+  useEffect(() => {
+    const memos = getMemos();
+    setMemos(memos);
+  }, [])
+
+  return (
+    <div className="memo-app">
+      <header className="memo-app-header">
+        <p>Super Simple Memo App</p>
+      </header>
+      <div className="memo-app-container">
+        <aside className="memo-app-sidebar">
+          <MemoList memos={memos} onEdit={handleEdit} />
+          <button onClick={handleAdd} className="memo-app-add-button">
+            +
+          </button>
+        </aside>
+        <div className="memo-app-content">
+          {editing && (
+            <MemoDetail
+              text={editedText}
+              id={editedId}
+              onChange={handleChange}
+              onSave={handleSave}
+              onDelete={handleDelete}
+            />
+          )}
+        </div>
+      </div>
+    </div>
+  );
 }
 
 export default MemoApp;
