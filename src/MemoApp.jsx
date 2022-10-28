@@ -4,32 +4,40 @@ import MemoDetail from "./components/MemoDetail";
 
 function MemoApp() {
   const [memos, setMemos] = useState([]);
-  const [editing, setEditing] = useState(false);
-  const [editedText, setEditedText] = useState("");
-  const [editedId, setEditedId] = useState("");
+  const [editingText, setEditingText] = useState({
+    editing: false,
+    content: "",
+    id: "",
+  });
   const itemKey = "memos";
 
   const handleAdd = (e) => {
     e.preventDefault();
-    setEditing(true);
-    setEditedId("");
-    setEditedText("");
+    setEditingText({
+      editing: true,
+      content: "",
+      id: "",
+    })
   }
 
   const handleChange = (e) => {
-    setEditedText(e.target.value);
+    setEditingText({
+      editing: editingText.editing,
+      content: e.target.value,
+      id: editingText.id,
+    })
   }
 
   const handleSave = (e) => {
     e.preventDefault();
-    if (editedText.length === 0) {
+    if (editingText.content.length === 0) {
       return;
     }
 
-    if (editedId) {
-      updateMemo(editedId, editedText);
+    if (editingText.id) {
+      updateMemo(editingText.id, editingText.content);
     } else {
-      createMemo(editedText);
+      createMemo(editingText.content);
     }
   }
 
@@ -39,15 +47,17 @@ function MemoApp() {
     const memoToEdit = memos.find(
       (memo) => memo.id === parseInt(id)
     );
-    setEditing(true);
-    setEditedId(id);
-    setEditedText(memoToEdit.content);
+    setEditingText({
+      editing: true,
+      content: memoToEdit.content,
+      id: id,
+    })
   }
 
   const handleDelete = (e) => {
     e.preventDefault();
-    if (editedId) {
-      deleteMemo(editedId);
+    if (editingText.id) {
+      deleteMemo(editingText.id);
     }
   }
 
@@ -58,9 +68,11 @@ function MemoApp() {
     updatedMemo.content = text;
 
     setMemos(newMemos);
-    setEditing(false);
-    setEditedId("");
-    setEditedText("");
+    setEditingText({
+      editing: false,
+      content: "",
+      id: "",
+    })
     saveMemos(newMemos);
   }
 
@@ -73,9 +85,11 @@ function MemoApp() {
     const newMemos = [...memos, newMemo];
 
     setMemos(newMemos);
-    setEditing(false);
-    setEditedId("");
-    setEditedText("");
+    setEditingText({
+      editing: false,
+      content: "",
+      id: "",
+    })
     saveMemos(newMemos);
   }
 
@@ -84,9 +98,11 @@ function MemoApp() {
       (memo) => memo.id !== parseInt(id)
     );
     setMemos(newMemos);
-    setEditing(false);
-    setEditedId("");
-    setEditedText("")
+    setEditingText({
+      editing: false,
+      content: "",
+      id: "",
+    })
     saveMemos(newMemos);
   }
 
@@ -117,10 +133,10 @@ function MemoApp() {
           </button>
         </aside>
         <div className="memo-app-content">
-          {editing && (
+          {editingText.editing && (
             <MemoDetail
-              text={editedText}
-              id={editedId}
+              text={editingText.content}
+              id={editingText.id}
               onChange={handleChange}
               onSave={handleSave}
               onDelete={handleDelete}
