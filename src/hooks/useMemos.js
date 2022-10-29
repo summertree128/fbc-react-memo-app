@@ -1,15 +1,14 @@
 import { useEffect, useState } from "react";
 
-const useMemos = () => {
-  const itemKey = "memos";
+const useMemos = (key) => {
   const [memos, setMemos] = useState([]);
   
   useEffect(() => {
-    const savedMemos = localStorage.getItem(itemKey);
+    const savedMemos = localStorage.getItem(key);
     if (savedMemos) {
       setMemos(JSON.parse(savedMemos))
     }
-  }, [])
+  }, [key])
 
   const insertMemo = (content) => {
     const newMemo = {
@@ -38,7 +37,7 @@ const useMemos = () => {
 
   const saveMemos = (newMemos) => {
     setMemos(newMemos);
-    localStorage.setItem(itemKey, JSON.stringify(memos));
+    localStorage.setItem(key, JSON.stringify(newMemos));
   };
 
   return {

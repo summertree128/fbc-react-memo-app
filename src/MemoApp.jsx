@@ -5,7 +5,7 @@ import useMemos from "./hooks/useMemos";
 import useMemoInput from "./hooks/useMemoInput";
 
 function MemoApp() {
-  const { memos, insertMemo, updateMemo, deleteMemo } = useMemos();
+  const { memos, insertMemo, updateMemo, deleteMemo } = useMemos("memos");
   const { memoInput, startInput, clearInput, changeInputText } = useMemoInput();
 
   const handleAdd = (e) => {
