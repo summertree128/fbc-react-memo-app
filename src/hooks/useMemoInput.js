@@ -1,7 +1,7 @@
 import { useState } from "react";
 
 function useMemoInput() {
-  const [ memoInput, setMemoInput ] = useState({
+  const [memoInput, setMemoInput] = useState({
     editing: false,
     content: "",
     id: "",
@@ -12,24 +12,24 @@ function useMemoInput() {
       editing: true,
       content,
       id,
-    })
-  }
+    });
+  };
 
   const clearInput = () => {
     setMemoInput({
       editing: false,
       content: "",
       id: "",
-    })
-  }
+    });
+  };
 
   const changeInputText = (content) => {
     setMemoInput({
       editing: memoInput.editing,
       content: content,
       id: memoInput.id,
-    })
-  }
+    });
+  };
 
   return {
     memoInput,
