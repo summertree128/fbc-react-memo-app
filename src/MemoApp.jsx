@@ -5,7 +5,7 @@ import useMemos from "./hooks/useMemos";
 import useMemoInput from "./hooks/useMemoInput";
 
 function MemoApp() {
-  const { memos, saveMemos } = useMemos();
+  const { memos, insertMemo, updateMemo, deleteMemo } = useMemos();
   const { memoInput, startInput, clearInput, changeInputText } = useMemoInput();
 
   const handleAdd = (e) => {
@@ -26,8 +26,10 @@ function MemoApp() {
     if (memoInput.id) {
       updateMemo(memoInput.id, memoInput.content);
     } else {
-      createMemo(memoInput.content);
+      insertMemo(memoInput.content);
     }
+
+    clearInput();
   };
 
   const handleEdit = (e) => {
@@ -41,35 +43,8 @@ function MemoApp() {
     e.preventDefault();
     if (memoInput.id) {
       deleteMemo(memoInput.id);
+      clearInput();
     }
-  };
-
-  const updateMemo = (id, text) => {
-    const newMemos = [...memos];
-    const updatedMemo = newMemos.find((memo) => memo.id === parseInt(id));
-    updatedMemo.title = text.split("\n")[0];
-    updatedMemo.content = text;
-
-    saveMemos(newMemos);
-    clearInput();
-  };
-
-  const createMemo = (text) => {
-    const newMemo = {
-      id: Date.now(),
-      title: text.split("\n")[0],
-      content: text,
-    };
-    const newMemos = [...memos, newMemo];
-
-    saveMemos(newMemos);
-    clearInput();
-  };
-
-  const deleteMemo = (id) => {
-    const newMemos = memos.filter((memo) => memo.id !== parseInt(id));
-    saveMemos(newMemos);
-    clearInput();
   };
 
   return (
