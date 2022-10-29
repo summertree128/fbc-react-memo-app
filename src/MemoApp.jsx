@@ -1,15 +1,15 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import MemoList from "./components/MemoList";
 import MemoDetail from "./components/MemoDetail";
+import useMemos from "./hooks/useMemos";
 
 function MemoApp() {
-  const [memos, setMemos] = useState([]);
-  const [editingText, setEditingText] = useState({
+  const { memos, saveMemos } = useMemos();
+  const [ editingText, setEditingText ] = useState({
     editing: false,
     content: "",
     id: "",
   });
-  const itemKey = "memos";
 
   const handleAdd = (e) => {
     e.preventDefault();
@@ -67,7 +67,6 @@ function MemoApp() {
     updatedMemo.title = text.split("\n")[0];
     updatedMemo.content = text;
 
-    setMemos(newMemos);
     setEditingText({
       editing: false,
       content: "",
@@ -84,7 +83,6 @@ function MemoApp() {
     };
     const newMemos = [...memos, newMemo];
 
-    setMemos(newMemos);
     setEditingText({
       editing: false,
       content: "",
@@ -97,7 +95,6 @@ function MemoApp() {
     const newMemos = memos.filter(
       (memo) => memo.id !== parseInt(id)
     );
-    setMemos(newMemos);
     setEditingText({
       editing: false,
       content: "",
@@ -105,20 +102,6 @@ function MemoApp() {
     })
     saveMemos(newMemos);
   }
-
- const getMemos = () => {
-    const memos = localStorage.getItem(itemKey);
-    return memos === null ? [] : JSON.parse(memos);
-  }
-
-  const saveMemos = (memos) => {
-    localStorage.setItem(itemKey, JSON.stringify(memos));
-  }
-
-  useEffect(() => {
-    const memos = getMemos();
-    setMemos(memos);
-  }, [])
 
   return (
     <div className="memo-app">
