@@ -1,65 +1,48 @@
-import React, { useState } from "react";
+import React from "react";
 import MemoList from "./components/MemoList";
 import MemoDetail from "./components/MemoDetail";
 import useMemos from "./hooks/useMemos";
+import useMemoInput from "./hooks/useMemoInput";
 
 function MemoApp() {
   const { memos, saveMemos } = useMemos();
-  const [ editingText, setEditingText ] = useState({
-    editing: false,
-    content: "",
-    id: "",
-  });
+  const { memoInput, startInput, clearInput, changeInputText } = useMemoInput();
 
   const handleAdd = (e) => {
     e.preventDefault();
-    setEditingText({
-      editing: true,
-      content: "",
-      id: "",
-    })
-  }
+    startInput();
+  };
 
   const handleChange = (e) => {
-    setEditingText({
-      editing: editingText.editing,
-      content: e.target.value,
-      id: editingText.id,
-    })
-  }
+    changeInputText(e.target.value);
+  };
 
   const handleSave = (e) => {
     e.preventDefault();
-    if (editingText.content.length === 0) {
+    if (memoInput.content.length === 0) {
       return;
     }
 
-    if (editingText.id) {
-      updateMemo(editingText.id, editingText.content);
+    if (memoInput.id) {
+      updateMemo(memoInput.id, memoInput.content);
     } else {
-      createMemo(editingText.content);
+      createMemo(memoInput.content);
     }
-  }
+  };
 
   const handleEdit = (e) => {
     e.preventDefault();
     const id = e.target.dataset.id;
-    const memoToEdit = memos.find(
-      (memo) => memo.id === parseInt(id)
-    );
-    setEditingText({
-      editing: true,
-      content: memoToEdit.content,
-      id: id,
-    })
-  }
+    const memoToEdit = memos.find((memo) => memo.id === parseInt(id));
+    startInput(memoToEdit.content, id);
+  };
 
   const handleDelete = (e) => {
     e.preventDefault();
-    if (editingText.id) {
-      deleteMemo(editingText.id);
+    if (memoInput.id) {
+      deleteMemo(memoInput.id);
     }
-  }
+  };
 
   const updateMemo = (id, text) => {
     const newMemos = [...memos];
@@ -67,13 +50,9 @@ function MemoApp() {
     updatedMemo.title = text.split("\n")[0];
     updatedMemo.content = text;
 
-    setEditingText({
-      editing: false,
-      content: "",
-      id: "",
-    })
     saveMemos(newMemos);
-  }
+    clearInput();
+  };
 
   const createMemo = (text) => {
     const newMemo = {
@@ -83,25 +62,15 @@ function MemoApp() {
     };
     const newMemos = [...memos, newMemo];
 
-    setEditingText({
-      editing: false,
-      content: "",
-      id: "",
-    })
     saveMemos(newMemos);
-  }
+    clearInput();
+  };
 
   const deleteMemo = (id) => {
-    const newMemos = memos.filter(
-      (memo) => memo.id !== parseInt(id)
-    );
-    setEditingText({
-      editing: false,
-      content: "",
-      id: "",
-    })
+    const newMemos = memos.filter((memo) => memo.id !== parseInt(id));
     saveMemos(newMemos);
-  }
+    clearInput();
+  };
 
   return (
     <div className="memo-app">
@@ -116,10 +85,10 @@ function MemoApp() {
           </button>
         </aside>
         <div className="memo-app-content">
-          {editingText.editing && (
+          {memoInput.editing && (
             <MemoDetail
-              text={editingText.content}
-              id={editingText.id}
+              text={memoInput.content}
+              id={memoInput.id}
               onChange={handleChange}
               onSave={handleSave}
               onDelete={handleDelete}
