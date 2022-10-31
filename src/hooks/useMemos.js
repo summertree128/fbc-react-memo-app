@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 const useMemos = (key) => {
   const [memos, setMemos] = useState([]);
@@ -10,35 +10,47 @@ const useMemos = (key) => {
     }
   }, [key]);
 
-  const insertMemo = (content) => {
-    const newMemo = {
-      id: Date.now(),
-      title: content.split("\n")[0],
-      content: content,
-    };
-    const newMemos = [...memos, newMemo];
+  const saveMemos = useCallback(
+    (newMemos) => {
+      setMemos(newMemos);
+      localStorage.setItem(key, JSON.stringify(newMemos));
+    },
+    [key]
+  );
 
-    saveMemos(newMemos);
-  };
+  const insertMemo = useCallback(
+    (content) => {
+      const newMemo = {
+        id: Date.now(),
+        title: content.split("\n")[0],
+        content: content,
+      };
+      const newMemos = [...memos, newMemo];
 
-  const updateMemo = (id, content) => {
-    const newMemos = [...memos];
-    const updatedMemo = newMemos.find((memo) => memo.id === parseInt(id));
-    updatedMemo.title = content.split("\n")[0];
-    updatedMemo.content = content;
+      saveMemos(newMemos);
+    },
+    [memos, saveMemos]
+  );
 
-    saveMemos(newMemos);
-  };
+  const updateMemo = useCallback(
+    (id, content) => {
+      const newMemos = [...memos];
+      const updatedMemo = newMemos.find((memo) => memo.id === parseInt(id));
+      updatedMemo.title = content.split("\n")[0];
+      updatedMemo.content = content;
 
-  const deleteMemo = (id) => {
-    const newMemos = memos.filter((memo) => memo.id !== parseInt(id));
-    saveMemos(newMemos);
-  };
+      saveMemos(newMemos);
+    },
+    [memos, saveMemos]
+  );
 
-  const saveMemos = (newMemos) => {
-    setMemos(newMemos);
-    localStorage.setItem(key, JSON.stringify(newMemos));
-  };
+  const deleteMemo = useCallback(
+    (id) => {
+      const newMemos = memos.filter((memo) => memo.id !== parseInt(id));
+      saveMemos(newMemos);
+    },
+    [memos, saveMemos]
+  );
 
   return {
     memos,

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
 
 function useMemoInput() {
   const [memoInput, setMemoInput] = useState({
@@ -7,29 +7,32 @@ function useMemoInput() {
     id: "",
   });
 
-  const startInput = (content = "", id = "") => {
+  const startInput = useCallback((content = "", id = "") => {
     setMemoInput({
       editing: true,
       content,
       id,
     });
-  };
+  }, []);
 
-  const clearInput = () => {
+  const clearInput = useCallback(() => {
     setMemoInput({
       editing: false,
       content: "",
       id: "",
     });
-  };
+  }, []);
 
-  const changeInputText = (content) => {
-    setMemoInput({
-      editing: memoInput.editing,
-      content: content,
-      id: memoInput.id,
-    });
-  };
+  const changeInputText = useCallback(
+    (content) => {
+      setMemoInput({
+        editing: memoInput.editing,
+        content: content,
+        id: memoInput.id,
+      });
+    },
+    [memoInput.editing, memoInput.id]
+  );
 
   return {
     memoInput,
