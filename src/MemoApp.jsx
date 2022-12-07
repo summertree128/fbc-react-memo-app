@@ -1,7 +1,7 @@
 import React from "react";
-import MemoDetail from "./components/MemoDetail";
 import Header from "./components/Header";
 import Sidebar from "./components/Sidebar";
+import Contents from "./components/Contents";
 
 class MemoApp extends React.Component {
   constructor() {
@@ -35,17 +35,14 @@ class MemoApp extends React.Component {
             onEdit={this.handleEdit}
             onAdd={this.handleAdd}
           />
-          <div className="memo-app-content">
-            {this.state.editing && (
-              <MemoDetail
-                text={this.state.text}
-                id={this.state.id}
-                onChange={this.handleChange}
-                onSave={this.handleSave}
-                onDelete={this.handleDelete}
-              />
-            )}
-          </div>
+          <Contents
+            editing={this.state.editing}
+            text={this.state.text}
+            id={this.state.id}
+            onChange={this.handleChange}
+            onSave={this.handleSave}
+            onDelete={this.handleDelete}
+          />
         </div>
       </div>
     );
