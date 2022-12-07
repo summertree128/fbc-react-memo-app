@@ -1,7 +1,7 @@
 import React from "react";
-import MemoList from "./components/MemoList";
 import MemoDetail from "./components/MemoDetail";
 import Header from "./components/Header";
+import Sidebar from "./components/Sidebar";
 
 class MemoApp extends React.Component {
   constructor() {
@@ -30,12 +30,11 @@ class MemoApp extends React.Component {
       <div className="memo-app">
         <Header />
         <div className="memo-app-container">
-          <aside className="memo-app-sidebar">
-            <MemoList memos={this.state.memos} onEdit={this.handleEdit} />
-            <button onClick={this.handleAdd} className="memo-app-add-button">
-              +
-            </button>
-          </aside>
+          <Sidebar
+            memos={this.state.memos}
+            onEdit={this.handleEdit}
+            onAdd={this.handleAdd}
+          />
           <div className="memo-app-content">
             {this.state.editing && (
               <MemoDetail
