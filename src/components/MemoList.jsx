@@ -1,6 +1,6 @@
 import React from "react";
 
-function MemoList(props) {
+export default function MemoList(props) {
   return (
     <ul>
       {props.memos.map((memo) => (
@@ -13,5 +13,3 @@ function MemoList(props) {
     </ul>
   );
 }
-
-export default MemoList;

@@ -1,4 +1,4 @@
-function MemoDetail(props) {
+export default function MemoDetail(props) {
   return (
     <form onSubmit={props.onSave} className="memo-app-form">
       <textarea
@@ -16,5 +16,3 @@ function MemoDetail(props) {
     </form>
   );
 }
-
-export default MemoDetail;
