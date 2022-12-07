@@ -1,6 +1,7 @@
 import React from "react";
 import MemoList from "./components/MemoList";
 import MemoDetail from "./components/MemoDetail";
+import Header from "./components/Header";
 
 class MemoApp extends React.Component {
   constructor() {
@@ -27,9 +28,7 @@ class MemoApp extends React.Component {
   render() {
     return (
       <div className="memo-app">
-        <header className="memo-app-header">
-          <p>Super Simple Memo App</p>
-        </header>
+        <Header />
         <div className="memo-app-container">
           <aside className="memo-app-sidebar">
             <MemoList memos={this.state.memos} onEdit={this.handleEdit} />
