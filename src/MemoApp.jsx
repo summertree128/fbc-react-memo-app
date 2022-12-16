@@ -52,11 +52,7 @@ function MemoApp() {
     <div className="memo-app">
       <Header />
       <div className="memo-app-container">
-        <Sidebar
-          memos={memos}
-          onEdit={handleEdit}
-          onAdd={handleAdd}
-        />
+        <Sidebar memos={memos} onEdit={handleEdit} onAdd={handleAdd} />
         <Contents
           editing={memoInput.editing}
           text={memoInput.content}

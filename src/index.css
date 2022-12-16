@@ -23,6 +23,10 @@ ul {
 
 .memo-app-header {
   margin-left: 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 400px;
 }
 
 .memo-app-container {
@@ -60,4 +64,14 @@ ul {
 .memo-app-save-button {
   width: 100%;
   margin-right: 8px;
+}
+
+.memo-app-login-button {
+  height: 24px;
+  width: 56px;
+}
+
+.memo-app-logout-button {
+  height: 24px;
+  width: 56px;
 }
