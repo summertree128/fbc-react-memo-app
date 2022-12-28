@@ -1,9 +1,9 @@
-import React from "react";
+import React, { useContext } from "react";
 import { useState } from "react";
 
-export const AuthContext = React.createContext(false);
+const AuthContext = React.createContext(false);
 
-const AuthProvider = ({ children }) => {
+export const AuthProvider = ({ children }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   // Stub method for login feature
@@ -27,4 +27,4 @@ const AuthProvider = ({ children }) => {
   );
 };
 
-export default AuthProvider;
+export const useAuth = () => useContext(AuthContext);

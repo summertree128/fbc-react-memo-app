@@ -1,4 +1,4 @@
-import { useAuth } from "../hooks/useAuth";
+import { useAuth } from "./AuthProvider";
 import LoginButton from "./LoginButton";
 import LogoutButton from "./LogoutButton";
 

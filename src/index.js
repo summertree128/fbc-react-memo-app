@@ -1,6 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import AuthProvider from "./components/AuthProvider";
+import { AuthProvider } from "./components/AuthProvider";
 import "./index.css";
 import MemoApp from "./MemoApp";
 import reportWebVitals from "./reportWebVitals";

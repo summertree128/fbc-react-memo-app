@@ -1,4 +1,4 @@
-import { useAuth } from "../hooks/useAuth";
+import { useAuth } from "./AuthProvider";
 
 export default function LoginButton() {
   const { login } = useAuth();

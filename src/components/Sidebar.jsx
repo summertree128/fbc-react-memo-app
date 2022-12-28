@@ -1,5 +1,5 @@
-import { useAuth } from "../hooks/useAuth";
 import AddButton from "./AddButton";
+import { useAuth } from "./AuthProvider";
 import MemoList from "./MemoList";
 
 export default function Sidebar(props) {
