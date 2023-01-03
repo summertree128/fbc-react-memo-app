@@ -1,11 +1,7 @@
 import { useCallback, useState } from "react";
 
 function useMemoInput() {
-  const [memoInput, setMemoInput] = useState({
-    editing: false,
-    content: "",
-    id: "",
-  });
+  const [memoInput, setMemoInput] = useState({ editing: false });
 
   const startInput = useCallback((content = "", id = "") => {
     setMemoInput({
@@ -16,11 +12,7 @@ function useMemoInput() {
   }, []);
 
   const clearInput = useCallback(() => {
-    setMemoInput({
-      editing: false,
-      content: "",
-      id: "",
-    });
+    setMemoInput({ editing: false });
   }, []);
 
   const changeInputText = useCallback(
