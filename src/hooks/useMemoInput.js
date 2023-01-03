@@ -17,13 +17,9 @@ function useMemoInput() {
 
   const changeInputText = useCallback(
     (content) => {
-      setMemoInput({
-        editing: memoInput.editing,
-        content: content,
-        id: memoInput.id,
-      });
+      setMemoInput({ ...memoInput, content });
     },
-    [memoInput.editing, memoInput.id]
+    [memoInput]
   );
 
   return {
