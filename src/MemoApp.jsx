@@ -2,128 +2,68 @@ import React from "react";
 import Header from "./components/Header";
 import Sidebar from "./components/Sidebar";
 import Contents from "./components/Contents";
+import useMemos from "./hooks/useMemos";
+import useMemoInput from "./hooks/useMemoInput";
 
-class MemoApp extends React.Component {
-  constructor() {
-    super();
-    this.state = {
-      memos: [],
-      editing: false,
-      text: "",
-      id: "",
-    };
-    this.itemKey = "memos";
-    this.handleAdd = this.handleAdd.bind(this);
-    this.handleChange = this.handleChange.bind(this);
-    this.handleSave = this.handleSave.bind(this);
-    this.handleEdit = this.handleEdit.bind(this);
-    this.handleDelete = this.handleDelete.bind(this);
-  }
+function MemoApp() {
+  const { memos, insertMemo, updateMemo, deleteMemo } = useMemos("memos");
+  const { memoInput, startInput, clearInput, changeInputText } = useMemoInput();
 
-  componentDidMount() {
-    const memos = this.getMemos();
-    this.setState({ memos });
-  }
-
-  render() {
-    return (
-      <div className="memo-app">
-        <Header />
-        <div className="memo-app-container">
-          <Sidebar
-            memos={this.state.memos}
-            onEdit={this.handleEdit}
-            onAdd={this.handleAdd}
-          />
-          <Contents
-            editing={this.state.editing}
-            text={this.state.text}
-            id={this.state.id}
-            onChange={this.handleChange}
-            onSave={this.handleSave}
-            onDelete={this.handleDelete}
-          />
-        </div>
-      </div>
-    );
-  }
-
-  handleAdd(e) {
+  const handleAdd = (e) => {
     e.preventDefault();
-    this.setState({ editing: true, id: "", text: "" });
-  }
+    startInput();
+  };
 
-  handleChange(e) {
-    this.setState({ text: e.target.value });
-  }
+  const handleChange = (e) => {
+    changeInputText(e.target.value);
+  };
 
-  handleSave(e) {
+  const handleSave = (e) => {
     e.preventDefault();
-    if (this.state.text.length === 0) {
+    if (memoInput.content.length === 0) {
       return;
     }
 
-    if (this.state.id) {
-      this.updateMemo(this.state.id, this.state.text);
+    if (memoInput.id) {
+      updateMemo(memoInput.id, memoInput.content);
     } else {
-      this.createMemo(this.state.text);
+      insertMemo(memoInput.content);
     }
-  }
 
-  handleEdit(e) {
+    clearInput();
+  };
+
+  const handleEdit = (e) => {
     e.preventDefault();
     const id = e.target.dataset.id;
-    const memoToEdit = this.state.memos.find(
-      (memo) => memo.id === parseInt(id)
-    );
-    this.setState({ editing: true, id: id, text: memoToEdit.content });
-  }
+    const memoToEdit = memos.find((memo) => memo.id === parseInt(id));
+    startInput(memoToEdit.content, id);
+  };
 
-  handleDelete(e) {
+  const handleDelete = (e) => {
     e.preventDefault();
-    if (this.state.id) {
-      this.deleteMemo(this.state.id);
+    if (memoInput.id) {
+      deleteMemo(memoInput.id);
+      clearInput();
     }
-  }
+  };
 
-  updateMemo(id, text) {
-    const newMemos = [...this.state.memos];
-    const updatedMemo = newMemos.find((memo) => memo.id === parseInt(id));
-    updatedMemo.title = text.split("\n")[0];
-    updatedMemo.content = text;
-
-    this.setState({ memos: newMemos, editing: false, id: "", text: "" });
-    this.saveMemos(newMemos);
-  }
-
-  createMemo(text) {
-    const newMemo = {
-      id: Date.now(),
-      title: text.split("\n")[0],
-      content: text,
-    };
-    const newMemos = [...this.state.memos, newMemo];
-
-    this.setState({ memos: newMemos, editing: false, id: "", text: "" });
-    this.saveMemos(newMemos);
-  }
-
-  deleteMemo(id) {
-    const newMemos = this.state.memos.filter(
-      (memo) => memo.id !== parseInt(id)
-    );
-    this.setState({ memos: newMemos, editing: false, id: "", text: "" });
-    this.saveMemos(newMemos);
-  }
-
-  getMemos() {
-    const memos = localStorage.getItem(this.itemKey);
-    return memos === null ? [] : JSON.parse(memos);
-  }
-
-  saveMemos(memos) {
-    localStorage.setItem(this.itemKey, JSON.stringify(memos));
-  }
+  return (
+    <div className="memo-app">
+      <Header />
+      <div className="memo-app-container">
+        <Sidebar memos={memos} onEdit={handleEdit} onAdd={handleAdd} />
+        <Contents
+          editing={memoInput.editing}
+          text={memoInput.content}
+          id={memoInput.id}
+          onChange={handleChange}
+          onSave={handleSave}
+          onDelete={handleDelete}
+        />
+      </div>
+    </div>
+  );
 }
 
 export default MemoApp;
